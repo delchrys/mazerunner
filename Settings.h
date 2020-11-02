@@ -18,15 +18,15 @@ const int8_t NRESET = 9;                        //reset on LoRa device
 const int8_t DIO0 = 3;                          //DIO0 on LoRa device, used for RX and TX done
 const int8_t DIO1 = -1;                         //DIO1 on LoRa device, normally not used so set to -1
 const int8_t DIO2 = -1;                         //DIO2 on LoRa device, normally not used so set to -1
-const int8_t LED1 = 8;                          //On board LED, logic high is on
+const int8_t LED1 = 13;                         //On board LED, logic high is on
 
 #define LORA_DEVICE DEVICE_SX1278               //this is the device we are using
 
-const int8_t joystickX1 = A2;                   //analog pin for the joystick 1 X pot
-const int8_t joystickY1 = A3;                   //analog pin for the joystick 1 Y pot
-const int8_t SWITCH1 = 2;                       //switch on joystick, set to -1 if not used
+const int8_t joystickX1 = A0;                   //analog pin for the joystick 1 X pot
+const int8_t joystickY1 = A1;                   //analog pin for the joystick 1 Y pot
+const int8_t SWITCH1 = -1;                       //switch on joystick, set to -1 if not used
   
-const uint32_t TXIdentity = 123 ;               //define a transmitter number, the receiver must use the same number
+const uint32_t TXIdentity = 1 ;               //define a transmitter number, the receiver must use the same number
                                                 //range is 0 to 255
 
 
