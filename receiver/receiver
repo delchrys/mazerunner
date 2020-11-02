@@ -1,46 +1,3 @@
-/*******************************************************************************************************
-  Programs for Arduino - Copyright of the author Stuart Robinson - 29/10/20
-
-  This program is supplied as is, it is up to the user of the program to decide if the program is
-  suitable for the intended purpose and free from errors.
-*******************************************************************************************************/
-
-/*******************************************************************************************************
-  Program Operation - This is a remote control receiver that uses a LoRa link to control the positions of
-  servos sent from a remote transmitter.
-
-  If the ttransmitter joystick has a switch, often made by pressing on the joystick, then this can be used
-  to remote control an output on the receiver.
-
-  The program is intended as a proof of concept demonstration of how to remote control servos, the program
-  is not designed as a practical remote control device for RC model cars for instance.
-
-  It would be straight forward to make the transmitter program send packets continuously, but in most places
-  in the world that would break a normal limitation of 10% duty cycle for unlicensed use. Therefore the
-  program was designed to only transmit at a 10% duty cycle. Thus the fastest (lowest air time) packets are
-  used, spreading factor 6 at a bandwidth of 500khz. This results in an air time for the 5 byte control
-  packet of around 4mS, so there are around 25 sent per second.
-
-  To have the receiver program print out the joystick values (0-255) read from the received packet, comment
-  in the line;
-
-  //#define DEBUG
-
-  Which is just above the loop() function. With the DEBUG enabled then there is a possibility that some
-  transmitted packets will be missed. With the DEBUG line enabled to servos should also sweep to and fro 3
-  times at program start-up.
-
-  To reduce the risk of the receiver picking up LoRa packets from other sources, the packet sent contains a
-  'TXidentity' number, valid values are 0 - 255. The receiver must be setup with the matching RXIdentity
-  number in Settings.h or the received packets will be ignored.
-
-  The pin definitions, LoRa frequency and LoRa modem settings are in the Settings.h file. These settings
-  are not necessarily optimised for long range. Note that this example uses implict LoRa packet mode
-  which means the packet size is fixed. 
-
-  Serial monitor baud rate is set at 115200.
-*******************************************************************************************************/
-
 #define programversion "V1.0"
 
 #include <SPI.h>
@@ -59,7 +16,7 @@ uint8_t joystickY1value;                   //variable to read the value from the
 uint8_t RXPacketL;                         //length of received packet
 uint8_t RXPacketType;                      //type of received packet
 
-//#define DEBUG
+#define DEBUG
 
 
 void loop()
@@ -185,30 +142,6 @@ void led_Flash(uint16_t flashes, uint16_t delaymS)
 }
 
 
-void sweepTest(uint8_t num)
-{
-  uint16_t index1, index2;
-  for (index1 = 1; index1 <= num; index1++)
-  {
-    for (index2 = 900; index2 <= 2100; index2++)
-    {
-      ServoX1.writeMicroseconds(index2);
-      ServoY1.writeMicroseconds(index2);
-    }
-
-    delay(1000);
-
-    for (index2 = 2100; index2 >= 900; index2--)
-    {
-      ServoX1.writeMicroseconds(index2);
-      ServoY1.writeMicroseconds(index2);
-    }
-
-    delay(1000);
-  }
-}
-
-
 void setupLoRa()
 {
   //this setup is used so as the implicit packet type,LORA_PACKET_FIXED_LENGTH, is used  
@@ -237,11 +170,6 @@ void setup()
 
   ServoX1.attach(pinservoX1);                     //connect pin pinservoX1 to ServoX1 object
   ServoY1.attach(pinservoY1);                     //connect pin pinservoY1 to ServoY1 object
-
-#ifdef DEBUG
-  Serial.println(F("Servo sweep test"));
-  sweepTest(3);
-#endif
 
   SPI.begin();
 
