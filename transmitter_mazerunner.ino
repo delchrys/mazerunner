@@ -1,47 +1,3 @@
-/*******************************************************************************************************
-  Programs for Arduino - Copyright of the author Stuart Robinson - 29/10/20
-
-  This program is supplied as is, it is up to the user of the program to decide if the program is
-  suitable for the intended purpose and free from errors.
-*******************************************************************************************************/
-
-/*******************************************************************************************************
-  Program Operation - This is a remote control transmitter that uses a LoRa link to transmit the positions
-  from a simple joystick to a remote receiver. The receiver uses the sent joystick positions to adjust the
-  positions of servos. The postions of the joysticks potentiometers on the transmitter are read with the
-  analogueRead() function.
-
-  If the joystick has a switch, often made by pressing on the joystick, then this can be used to remote
-  control an output on the receiver. The switch is read by an interrupt, the interrupt routine sets a flag
-  byte which is read in loop().
-
-  The program is intended as a proof of concept demonstration of how to remote control servos, the program
-  is not designed as a practical remote control device for RC model cars for instance.
-
-  It would be straight forward to make the transmitter program send packets continuously, but in most places
-  in the world that would break a normal limitation of 10% duty cycle for unlicensed use. Therefore the
-  program was designed to only transmit at a 10% duty cycle. Thus the fastest (lowest air time) packets are
-  used, spreading factor 6 at a bandwidth of 500khz. This results in an air time for the 5 byte control
-  packet of around 4mS, so there are around 25 sent per second.
-
-  To have the transmitter program print out the values read from the joystick, comment in the line;
-
-  //#define DEBUG
-
-  Which is just above the loop() function. With the DEBUG enabled the transmission rate, the rate at which
-  the control packets are transmitted will be slowed down.
-
-  To reduce the risk of the receiver picking up LoRa packets from other sources, the packet sent contains a
-  'TXidentity' number, valid values are 0 - 65535. The receiver must be setup with the matching identity
-  number or the received packets will be ignored.
-
-  The pin definitions, LoRa frequency and LoRa modem settings are in the Settings.h file. These settings
-  are not necessarily optimised for long range. Note that this example uses implict LoRa packet mode
-  which means the packet size is fixed. 
-
-  Serial monitor baud rate is set at 115200.
-*******************************************************************************************************/
-
 #include <SPI.h>
 #include <SX127XLT.h>
 #include "Settings.h"
@@ -59,7 +15,7 @@ uint8_t joystickY1value;                    //variable to read the value from th
 
 volatile bool switch1flag = false;
 
-//#define DEBUG                               //comment in thie line (remove the two // at the beggining) for debug output
+#define DEBUG                               //comment in thie line (remove the two // at the beggining) for debug output
 
 
 void loop()
